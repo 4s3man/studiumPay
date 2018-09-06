@@ -115,15 +115,11 @@ class Studiumpay_Public {
     var_dump($_POST);
 		exit('submitted no error');
 		}, function($errors) {
-		    echo "Errors: <br/>";
-		    foreach ($errors as $error) {
-		        echo "$error<br />";
-	    }
-			exit('submitted error');
+			$GLOBALS['studiumPayErrors'] = $errors;
 		});
 	}
 
 	public function render_payment_form(){
-		echo $this->form;
+		$this->form->render();
 	}
 }

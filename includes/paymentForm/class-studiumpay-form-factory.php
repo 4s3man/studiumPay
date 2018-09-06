@@ -23,27 +23,50 @@ class SP_FormFactory {
 	 * @var      Array    $courses    Active courses, name => cost
 	 */
   public $courses = [
-    'a' => 10,
-    'b' => 10,
-    'c' => 10,
-    'd' => 10,
+    'a' => 100,
+    'b' => 100,
+    'c' => 100,
+    'd' => 100,
+  ];
+
+  public $additional = [
+    'prepay' => 500,
   ];
 
   public function __construct(){
 
   }
 
+  public function render(){
+    echo $this->form;
+  }
+
+  public function handle(){
+    $this->form->handle();
+  }
+
   public function createForm(){
 		$form = new Gregwar\Formidable\Form($this->getFormTemplate(__DIR__.'/studiumpay-form-template.php'));
-    $em = 'dono';
+
     $form->addConstraint('cost', function($value) {
-    //todo zrobić constraint uzywając $courses dodac jquery żeby range przesuwał się na prawo i lewo
-    if (10 < intval((string) $value)) {
-        return 'Your name should be at least 10 characters!';
+      $postedCourses = array_intersect_key($this->courses,$_POST);
+
+      if ($_POST['prepay'] && sizeof($postedCourses) === sizeof($this->courses)) {
+        $_POST['cost'] = $this->additional['prepay'];
+      } else {
+        if (!$postedCourses) {
+          return 'At least one checkbox should be selected';
+        }
+
+        $cost = array_reduce($postedCourses, [$this, 'sum']);
+        if ($value < $cost) {
+          return 'Cost is too low';
+        }
       }
     });
+    $this->form = $form;
 
-    return $form;
+    return $this;
 	}
 
   private function initialValue($name){
@@ -58,4 +81,19 @@ class SP_FormFactory {
 		return $view;
 	}
 
+  private function sum($carry, $item){
+    $carry += $item;
+    return $carry;
+  }
+
+  public function handleErrors(){
+
+    // $errors = isset($_POST['studiumPayErrors']) && isArray($_POST['studiumPayErrors']) ?: $_POST['studiumPayErrors'];
+    // if ( count($errors) ) {
+    //   foreach ($erros as $error){
+    //     var_dump($error);
+    //   }
+    //   exit('error dbu');
+    // }
+  }
 }

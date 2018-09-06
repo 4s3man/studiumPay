@@ -2,3 +2,22 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+ .studiumPay{
+  text-align: center;
+ }
+ .studiumPay__item{
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+ .studiumPay__item--checkbox{
+   justify-content: space-around;
+ }
+ .studiumPay__item--cost,  .studiumPay__item--submit, .studiumPay__item--additional{
+  justify-content: center;
+ }
+ .studiumPay__label{
+   display: flex;
+   align-items: center;
+ }

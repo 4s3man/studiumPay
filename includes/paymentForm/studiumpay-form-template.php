@@ -1,28 +1,12 @@
 <form class="studiumPay jumbotron" id="studiumPay_form" method="post" >
 
-  <div class="studiumPay__errors">
-      <?php  if (count($this->errors))
-      foreach ($this->errors as $error) {
-        echo "$error<br />";
-    } ?>
-  </div>
-
   <div class="studiumPay__item studiumPay__item--checkbox">
-  <?php foreach ($this->courses as $key => $value): ?>
+  <?php foreach ($this->variables['courses'] as $key => $value): ?>
     <label class="studiumPay__label" for="<?php echo $key; ?>">
       <?php echo $key; ?>
       <input class="studiumPay__checkbox--JS" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
     </label>
   <?php endforeach; ?>
-  </div>
-
-  <div id="studiumPay_prepay" class="studiumPay__item studiumPay__item--additional">
-    <?php foreach ($this->additional as $key => $value): ?>
-      <label class="studiumPay__label" for="<?php echo $key; ?>">
-        <?php echo $key; ?>
-        <input type="checkbox" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
-      </label>
-    <?php endforeach; ?>
   </div>
 
   <div class="studiumPay__item studiumPay__item--cost">

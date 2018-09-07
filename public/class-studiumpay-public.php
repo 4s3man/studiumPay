@@ -50,6 +50,15 @@ class Studiumpay_Public {
 	private $form;
 
 	/**
+	 * The version of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var
+	 */
+	private $przelewy24;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -57,11 +66,11 @@ class Studiumpay_Public {
 	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$formFactory = new SP_FormFactory();
-		$this->form = $formFactory->createForm('SP_Form_Decorator');
+		$this->form = new SP_Form_Decorator();
+		$this->przelewy24 = new Przelewy24\Przelewy24();
+		exit(1);
 	}
 
 	/**
@@ -70,21 +79,7 @@ class Studiumpay_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Studiumpay_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Studiumpay_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/studiumpay-public.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -93,33 +88,14 @@ class Studiumpay_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Studiumpay_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Studiumpay_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/studiumpay-public.js', array( 'jquery' ), $this->version, false );
-
 	}
 
 	public function handle_payment_form(){
-		$this->form->handle(function() {
-		$this->form->clearErrors();
-		}, function($errors) {
-			$this->form->setErrors($errors);
-		});
+		$this->form->handle();
 	}
 
 	public function render_payment_form(){
-		// var_dump($this->form);
 		$this->form->render();
 	}
 }

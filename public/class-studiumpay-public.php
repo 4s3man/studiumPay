@@ -61,7 +61,7 @@ class Studiumpay_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$formFactory = new SP_FormFactory();
-		$this->form = $formFactory->createForm();
+		$this->form = $formFactory->createForm('SP_Form_Decorator');
 	}
 
 	/**
@@ -112,14 +112,14 @@ class Studiumpay_Public {
 
 	public function handle_payment_form(){
 		$this->form->handle(function() {
-    var_dump($_POST);
-		exit('submitted no error');
+		$this->form->clearErrors();
 		}, function($errors) {
-			$GLOBALS['studiumPayErrors'] = $errors;
+			$this->form->setErrors($errors);
 		});
 	}
 
 	public function render_payment_form(){
+		// var_dump($this->form);
 		$this->form->render();
 	}
 }

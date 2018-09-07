@@ -112,8 +112,7 @@ class Studiumpay {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-studiumpay-i18n.php';
 
 		/**
-		* The class responsible for defining all actions that occur in the public-facing
-		* side of the site.
+		* The class responsible for creating forms
 		*/
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/paymentForm/class-studiumpay-form-factory.php';
 

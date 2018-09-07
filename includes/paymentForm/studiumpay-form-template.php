@@ -1,7 +1,10 @@
 <form class="studiumPay jumbotron" id="studiumPay_form" method="post" >
 
   <div class="studiumPay__errors">
-    <?php $this->handleErrors(); ?>
+      <?php  if (count($this->errors))
+      foreach ($this->errors as $error) {
+        echo "$error<br />";
+    } ?>
   </div>
 
   <div class="studiumPay__item studiumPay__item--checkbox">

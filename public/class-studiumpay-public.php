@@ -1,5 +1,6 @@
 <?php
 
+use Przelewy24\Przelewy24;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -41,11 +42,11 @@ class Studiumpay_Public {
 	private $version;
 
 	/**
-	 * The version of this plugin.
+	 * The payment form
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      Formidable/Form    $form
+	 * @var      Studiumpay_Form_Decorator    $form
 	 */
 	private $form;
 
@@ -54,7 +55,7 @@ class Studiumpay_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var
+	 * @var			 Studiumpay_Przelewy24_Decorator
 	 */
 	private $przelewy24;
 
@@ -68,9 +69,8 @@ class Studiumpay_Public {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$this->form = new SP_Form_Decorator();
-		$this->przelewy24 = new Przelewy24\Przelewy24();
-		exit(1);
+		$this->form = new Studiumpay_Form_Decorator();
+		$this->przelewy24 = new Przelewy24(64225,64225,'319a865d1bb01efd',true);
 	}
 
 	/**
@@ -92,7 +92,12 @@ class Studiumpay_Public {
 	}
 
 	public function handle_payment_form(){
-		$this->form->handle();
+		session_start();
+		$this->form->handle(function (){
+			$RET = $this->przelewy24->testConnection();
+			var_dump($RET);
+			exit('debug');
+		});
 	}
 
 	public function render_payment_form(){

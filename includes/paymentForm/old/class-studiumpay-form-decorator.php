@@ -83,17 +83,17 @@ class Studiumpay_Form_Decorator {
   * @return String error
   */
   private function setConstraints($form){
-    // $form->addConstraint('cost', function($value) {
-    //   $postedCourses = array_intersect_key($this->courses,$_POST);
-    //     if (!$postedCourses) {
-    //       return 'At least one checkbox should be selected';
-    //     }
-    //
-    //     $cost = array_reduce($postedCourses, [$this, 'sum']);
-    //     if ($value < $cost) {
-    //       return 'Cost is too low';
-    //     }
-    //   });
+    $form->addConstraint('cost', function($value) {
+      $postedCourses = array_intersect_key($this->courses,$_POST);
+        if (!$postedCourses) {
+          return 'At least one checkbox should be selected';
+        }
+
+        $cost = array_reduce($postedCourses, [$this, 'sum']);
+        if ($value < $cost) {
+          return 'Cost is too low';
+        }
+      });
   }
 
 /**

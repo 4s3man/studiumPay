@@ -30,7 +30,23 @@ class Studiumpay_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+		$headers = ['jakies', 'rzeczy'];
+		$dataExistAndValid = Studiumpay_Activator::checkDataFile($headers);
 
+		if (!$dataExistAndValid) {
+			$orders = fopen(dirname(__DIR__) . '/data/orders.csv', 'w');
+			fputcsv($orders, $headers);
+			fclose($orders);
+		}
 	}
 
+	public static function checkDataFile($headers){
+		if(($orders = @fopen(dirname(__DIR__) . '/data/orders.csv', 'r')) !== false){
+			if($headers === fgetcsv($orders)){
+				return true;
+			}
+			fclose($orders);
+		}
+		return false;
+	}
 }

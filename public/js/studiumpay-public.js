@@ -1,15 +1,15 @@
 (function( $ ) {
 	'use strict';
 
-// 	$(function() {
+	$(function() {
 // 		$('#studiumPay_prepay').hide();
 // 		$('#studiumPay_display').text($('#studiumPay_cost').val());
-// 		$('#studiumPay_cost')
-// 			.attr('type', 'range')
-// 			.on("change mousemove", function() {
-// 				var cost = this.value;
-// 				$('#studiumPay_display').text(cost);
-// 			});
+		$('#studiumPay_cost')
+			.attr('type', 'range')
+			.on("change mousemove", function() {
+				var cost = this.value;
+				$('#studiumPay_display').text(cost);
+			});
 // //todo zrefraktoryzwoać do osobnej funkcji przyjmującej 2 argumenty
 // 			$('.studiumPay__checkbox--JS').on('change', function(){
 // 				var costSum = 0;
@@ -26,6 +26,6 @@
 // 				}
 // 			});
 //--------------
-	// });
+	});
 
 })( jQuery );

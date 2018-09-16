@@ -56,7 +56,7 @@ class Przelewy24 {
      * Array of POST data
      * @var array
      */
-    private $postData        =    array();
+    public $postData        =    array();
 
     /**
      *

@@ -39,6 +39,18 @@ class Studiumpay_Form_Decorator {
   ];
 
   /**
+   * Array of courses
+   *
+   * @since    1.0.0
+   * @access   private
+   * @var      Array    $languages  textToDisplay => value
+   */
+  private $languages = [
+    'PL' => 'PL',
+    'EN' => 'EN',
+  ];
+
+  /**
   * Construct
   */
   public function __construct(){
@@ -49,17 +61,12 @@ class Studiumpay_Form_Decorator {
          'errors' => $this->errors,
        ]
      );
-     $this->setConstraints($form);
+   $this->setConstraints($form);
 
-    $this->form = $form;
-  }
+   $form->source('languages', $this->languages);
+   $form->setValue('p24_language', 'PL');
 
-  /**
-  * Render error panel and form
-  */
-  public function render(){
-    $this->renderErrors();
-    echo $this->form;
+   $this->form = $form;
   }
 
   /**
@@ -77,24 +84,53 @@ class Studiumpay_Form_Decorator {
   }
 
   /**
+  * Render error panel and form
+  */
+  public function render(){
+    $this->renderErrors();
+    echo $this->form;
+  }
+
+  public function getValues(){
+    return $this->form->getValues();
+  }
+
+  /**
   * Set form constraints
   *
   * @param Gregwar\Formidable\Form $from
   * @return String error
   */
   private function setConstraints($form){
-    // $form->addConstraint('cost', function($value) {
+    $form->addConstraint('p24_email', function($value){
+      if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+        return 'Invalid email format';
+      }
+    });
+
+    // TEST
+    // $form->addConstraint('kurwa', function($value) {
+    //     return 'error kurwa';
+    // });
+
+    // $form->addConstraint('p24_amount', function($value) {
     //   $postedCourses = array_intersect_key($this->courses,$_POST);
-    //     if (!$postedCourses) {
-    //       return 'At least one checkbox should be selected';
-    //     }
-    //
     //     $cost = array_reduce($postedCourses, [$this, 'sum']);
     //     if ($value < $cost) {
     //       return 'Cost is too low';
     //     }
     //   });
   }
+
+  // private function setConstraintsForCourses($form){
+  //   foreach ($this->courses as $name => $cost){
+  //     $form->addConstraint($name, function($value){
+  //       if ($value < 0) {
+  //         return 'Invalid course amount';
+  //       }
+  //     });
+  //   }
+  // }
 
 /**
 * Render Form error template

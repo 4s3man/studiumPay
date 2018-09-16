@@ -1,0 +1,15 @@
+form
+  p24_description
+  constraints for p24_amount
+
+form Handling
+  regenerate session_id somewhere
+  save tmp data
+  register transaction
+  validate transaction
+  save validated transaction data
+  
+
+step 2
+form
+ make inputs from tribe events

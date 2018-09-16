@@ -1,6 +1,5 @@
 <?php
 
-use Przelewy24\Przelewy24;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -70,7 +69,7 @@ class Studiumpay_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->form = new Studiumpay_Form_Decorator();
-		$this->przelewy24 = new Przelewy24(64225,64225,'319a865d1bb01efd',true);
+		$this->przelewy24 = new Studiumpay_Przelewy24_Decorator();
 	}
 
 	/**
@@ -91,15 +90,31 @@ class Studiumpay_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/studiumpay-public.js', array( 'jquery' ), $this->version, false );
 	}
 
+	/**
+	 * Handle payment form
+	 *
+	 * @since    1.0.0
+	 */
 	public function handle_payment_form(){
-		session_start();
-		$this->form->handle(function (){
-			$RET = $this->przelewy24->testConnection();
-			var_dump($RET);
+		// session_start();
+		$this->form->handle(function () {
+			$data = $this->form->getValues();
+			$this->przelewy24->setGetawayObject($data);
+			var_dump($data);
+			// var_dump($this->przelewy24->przelewy24);
+			// $RET = $this->przelewy24->przelewy24->testConnection();
+			// var_dump($RET);
 			exit('debug');
 		});
+		//todo zrobić coś z tym tak żeby było ok
+		session_regenerate_id();
 	}
 
+	/**
+	 * Render payment form
+	 *
+	 * @since    1.0.0
+	 */
 	public function render_payment_form(){
 		$this->form->render();
 	}

@@ -4,7 +4,7 @@
       <?php foreach ($this->variables['courses'] as $name => $cost): ?>
         <label for="<?php echo $name; ?>">
           <?php echo $name; ?>
-        <input type="int" min="0" required name="<?php echo $name; ?>" value="0">
+        <input class='studiumPay_intInput' type="int" min="0" required name="<?php echo $name; ?>" value="0">
         </label>
       <?php endforeach; ?>
     </div>

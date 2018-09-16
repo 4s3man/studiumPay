@@ -52,7 +52,19 @@ class Studiumpay_Przelewy24_Decorator{
     $this->przelewy24->addValue('p24_country', 'PL');
     $this->przelewy24->addValue('p24_currency', 'PLN');
 
+    $this->przelewy24->addValue('p24_description', 'Payment for studiumNVC courses');
+
+    foreach($data as $k=>$v) $this->przelewy24->addValue($k,$v);
+
     $this->przelewy24->addValue('p24_api_version', P24_VERSION);
+  }
+
+  public function saveOrder($data){
+
+  }
+
+  public function sendPaymentRequest(){
+
   }
 
 }

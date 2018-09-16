@@ -2,14 +2,16 @@
 	'use strict';
 
 	$(function() {
-// 		$('#studiumPay_prepay').hide();
-// 		$('#studiumPay_display').text($('#studiumPay_cost').val());
+
+		$('#studiumPay_display').text($('#studiumPay_cost').val());
 		$('#studiumPay_cost')
 			.attr('type', 'range')
+			.attr('max', 10000)
 			.on("change mousemove", function() {
 				var cost = this.value;
 				$('#studiumPay_display').text(cost);
 			});
+
 // //todo zrefraktoryzwoać do osobnej funkcji przyjmującej 2 argumenty
 // 			$('.studiumPay__checkbox--JS').on('change', function(){
 // 				var costSum = 0;

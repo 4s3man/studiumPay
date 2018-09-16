@@ -1,6 +1,5 @@
 form
-  p24_description
-  constraints for p24_amount
+  js dynamically set amount based on selected inputs
 
 form Handling
   regenerate session_id somewhere
@@ -8,7 +7,8 @@ form Handling
   register transaction
   validate transaction
   save validated transaction data
-  
+
+
 
 step 2
 form

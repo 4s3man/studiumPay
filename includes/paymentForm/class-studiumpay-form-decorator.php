@@ -95,6 +95,24 @@ class Studiumpay_Form_Decorator {
     return $this->form->getValues();
   }
 
+  public function getDataForPaymentRequest(){
+    $data = $this->form->getValues();
+    $postedCourses = array_intersect_key($data, $this->courses);
+    $id = 1;
+
+    $parsedData = [];
+    foreach ($postedCourses as $key => $value) {
+      if ($value > 0) {
+        $parsedData['p24_name_' . $id] = $key;
+        $parsedData['p24_quantity_' . $id] = intval((string) $value);
+        $parsedData['p24_price_' . $id] = intval((string)$this->courses[$key]);
+        $id++;
+      }
+    }
+    
+    return array_merge($parsedData, array_diff_key($data, $this->courses));
+  }
+
   /**
   * Set form constraints
   *
@@ -108,29 +126,15 @@ class Studiumpay_Form_Decorator {
       }
     });
 
-    // TEST
-    // $form->addConstraint('kurwa', function($value) {
-    //     return 'error kurwa';
-    // });
-
-    // $form->addConstraint('p24_amount', function($value) {
-    //   $postedCourses = array_intersect_key($this->courses,$_POST);
-    //     $cost = array_reduce($postedCourses, [$this, 'sum']);
-    //     if ($value < $cost) {
-    //       return 'Cost is too low';
-    //     }
-    //   });
+    $form->addConstraint('p24_amount', function($value) {
+        $data = $this->form->getValues();
+        $postedCourses = array_intersect_key($data, $this->courses);
+        $minCost = $this->calculateMinCost($postedCourses);
+        if ($value < $minCost) {
+          return 'Cost is too low';
+        }
+      });
   }
-
-  // private function setConstraintsForCourses($form){
-  //   foreach ($this->courses as $name => $cost){
-  //     $form->addConstraint($name, function($value){
-  //       if ($value < 0) {
-  //         return 'Invalid course amount';
-  //       }
-  //     });
-  //   }
-  // }
 
 /**
 * Render Form error template
@@ -141,6 +145,14 @@ class Studiumpay_Form_Decorator {
       echo $error;
     }
     echo '</div>';
+  }
+
+  private function calculateMinCost($postedCourses){
+    $minCost = 0;
+    foreach ($postedCourses as $key => $value) {
+      $minCost += $value * $this->courses[$key];
+    }
+    return $minCost;
   }
 
   /**

@@ -108,14 +108,13 @@ class Studiumpay_Public {
 	public function handle_payment_form(){
 		// session_start();
 		$this->form->handle(function () {
-			$data = $this->form->getValues();
+			$data = $this->form->getDataForPaymentRequest();
+
+			$this->przelewy24->setGetawayObject($data);
 
 			//todo zrobić
 			$this->repository->saveOrder($data);
 
-			$this->przelewy24->setGetawayObject(
-				$this->form->getDataForPaymentRequest()
-			);
 			//
 			// //todo zrobić
 			// $this->przelewy24->sendPaymentRequest();

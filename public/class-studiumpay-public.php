@@ -108,6 +108,8 @@ class Studiumpay_Public {
 			//todo zrobić
 			$this->przelewy24->sendPaymentRequest();
 
+			var_dump($this->przelewy24);
+
 			exit('s');
 		});
 		//todo zrobić coś z tym tak żeby było ok

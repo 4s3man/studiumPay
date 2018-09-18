@@ -30,7 +30,6 @@ class Studiumpay_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		$headers = ['jakies', 'rzeczy'];
 		$dataExistAndValid = Studiumpay_Activator::checkDataFile($headers);
 
 		if (!$dataExistAndValid) {
@@ -38,6 +37,10 @@ class Studiumpay_Activator {
 			fputcsv($orders, $headers);
 			fclose($orders);
 		}
+	}
+
+	public static function createTables(){
+
 	}
 
 	public static function checkDataFile($headers){

@@ -30,26 +30,13 @@ class Studiumpay_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		$dataExistAndValid = Studiumpay_Activator::checkDataFile($headers);
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
 
-		if (!$dataExistAndValid) {
-			$orders = fopen(dirname(__DIR__) . '/data/orders.csv', 'w');
-			fputcsv($orders, $headers);
-			fclose($orders);
-		}
-	}
+		$sql = file_get_contents(dirname(__DIR__) . '/data/db.sql');
 
-	public static function createTables(){
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
 
-	}
-
-	public static function checkDataFile($headers){
-		if(($orders = @fopen(dirname(__DIR__) . '/data/orders.csv', 'r')) !== false){
-			if($headers === fgetcsv($orders)){
-				return true;
-			}
-			fclose($orders);
-		}
-		return false;
 	}
 }

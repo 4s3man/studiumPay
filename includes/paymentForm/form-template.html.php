@@ -11,8 +11,10 @@
     <div class="col-6">
       email
       <input type="text" style="width:250px" required name="p24_email" value="no-reply@przelewy24.pl" />
-      imie i nazwisko
-      <input type="text" style="width:250px" required name="p24_client" value="Jan Kowalski" />
+      imie
+      <input type="text" style="width:250px" required name="client_name" value="Jan Kowalski" />
+      nazwisko
+      <input type="text" style="width:250px" required name="client_surname" value="Jan" />
     </div>
   </div>
   amount

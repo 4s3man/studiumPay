@@ -122,6 +122,12 @@ class Studiumpay {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-studiumpay-przelewy24-decorator.php';
 
 		/**
+		* The class responsible for setting przelewy24 object
+		*/
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-studiumpay-repository.php';
+
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-studiumpay-admin.php';

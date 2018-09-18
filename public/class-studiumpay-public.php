@@ -59,6 +59,15 @@ class Studiumpay_Public {
 	private $przelewy24;
 
 	/**
+	 * The plugin repository
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var			 Studiumpay_Repository
+	 */
+	private $repository;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -70,6 +79,7 @@ class Studiumpay_Public {
 		$this->version = $version;
 		$this->form = new Studiumpay_Form_Decorator();
 		$this->przelewy24 = new Studiumpay_Przelewy24_Decorator();
+		$this->repository = new Studiumpay_Repository();
 	}
 
 	/**
@@ -98,22 +108,22 @@ class Studiumpay_Public {
 	public function handle_payment_form(){
 		// session_start();
 		$this->form->handle(function () {
-			$data = $this->form->getDataForPaymentRequest();
+			$data = $this->form->getValues();
 
 			//todo zrobić
-			$this->przelewy24->saveOrder($data);
+			$this->repository->saveOrder($data);
 
-			$this->przelewy24->setGetawayObject($data);
-
-			//todo zrobić
-			$this->przelewy24->sendPaymentRequest();
-
-			var_dump($this->przelewy24);
+			$this->przelewy24->setGetawayObject(
+				$this->form->getDataForPaymentRequest()
+			);
+			//
+			// //todo zrobić
+			// $this->przelewy24->sendPaymentRequest();
 
 			exit('s');
 		});
 		//todo zrobić coś z tym tak żeby było ok
-		session_regenerate_id();
+		// session_regenerate_id();
 	}
 
 	/**

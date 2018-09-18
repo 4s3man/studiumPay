@@ -109,7 +109,11 @@ class Studiumpay_Form_Decorator {
         $id++;
       }
     }
-    
+
+    $parsedData['p24_client'] = $data['client_name'] . ' ' . $data['client_surname'];
+    unset($data['client_name']);
+    unset($data['client_surname']);
+
     return array_merge($parsedData, array_diff_key($data, $this->courses));
   }
 
@@ -121,7 +125,7 @@ class Studiumpay_Form_Decorator {
   */
   private function setConstraints($form){
     $form->addConstraint('p24_email', function($value){
-      if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+      if (!filter_var(trim($value), FILTER_VALIDATE_EMAIL)) {
         return 'Invalid email format';
       }
     });
@@ -133,6 +137,18 @@ class Studiumpay_Form_Decorator {
         if ($value < $minCost) {
           return 'Cost is too low';
         }
+      });
+
+      $form->addConstraint('client_name', function($value) {
+        if(preg_match('/[^\p{L}]+/', trim($value))){
+          return 'Invalid characters in name field';
+        };
+      });
+
+      $form->addConstraint('client_surname', function($value) {
+        if(preg_match('/[^\p{L}]+/', trim($value))){
+          return 'Invalid characters in surname field';
+        };
       });
   }
 
@@ -153,19 +169,5 @@ class Studiumpay_Form_Decorator {
       $minCost += $value * $this->courses[$key];
     }
     return $minCost;
-  }
-
-  /**
-  * Sum used in setConstraints function
-  * to sum minimum events cost
-  *
-  * @param int $carry sum container
-  * @param int $item
-  *
-  * @return int sum
-  */
-  private function sum($carry, $item){
-    $carry += $item;
-    return $carry;
   }
 }

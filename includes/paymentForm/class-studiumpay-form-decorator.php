@@ -105,7 +105,7 @@ class Studiumpay_Form_Decorator {
       if ($value > 0) {
         $parsedData['p24_name_' . $id] = $key;
         $parsedData['p24_quantity_' . $id] = intval((string) $value);
-        $parsedData['p24_price_' . $id] = intval((string)$this->courses[$key]);
+        $parsedData['p24_price_' . $id] = intval((string)$this->courses[$key]) * 100;
         $id++;
       }
     }
@@ -113,6 +113,10 @@ class Studiumpay_Form_Decorator {
     $parsedData['p24_client'] = $data['client_name'] . ' ' . $data['client_surname'];
     unset($data['client_name']);
     unset($data['client_surname']);
+
+    unset($data['regimen_agreement']);
+
+    $data['p24_amount'] *= 100;
 
     return array_merge($parsedData, array_diff_key($data, $this->courses));
   }

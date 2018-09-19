@@ -39,7 +39,6 @@ class Studiumpay_Activator {
 		  `surname` VARCHAR(60) NOT NULL,
 		  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		  `id` INT(11) NOT NULL,
-		  `valid` TINYINT(1) NOT NULL DEFAULT 0,
 		  PRIMARY KEY (`id`))'. $charset_collate .';';
 
 			$sql_orders = 'CREATE TABLE IF NOT EXISTS `wordpress`.`wp_studiumpay_orders` (

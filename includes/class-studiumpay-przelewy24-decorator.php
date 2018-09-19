@@ -36,6 +36,21 @@ class Studiumpay_Przelewy24_Decorator{
     $this->przelewy24 = new Przelewy24(64225,64225,'319a865d1bb01efd',true);
   }
 
+  public function addRequestConstants(&$data){
+    $protocol = ( isset($_SERVER['HTTPS'] )  && $_SERVER['HTTPS'] != 'off' )? "https://":"http://";
+
+    $data['p24_session_id'] = md5(session_id().date("YmdHis"));
+    $data['p24_url_return'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=1";
+    //todo uncoment when verivication will be writen
+    // $data['p24_url_satatus'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=2";
+    $data['p24_country'] = 'PL';
+    $data['p24_currency'] = 'PLN';
+    $data['p24_description'] = 'Payment for studiumNVC courses';
+    $data['p24_api_version'] = P24_VERSION;
+
+    return $data;
+  }
+
   /**
    * Set przelewy24 object
    *
@@ -43,28 +58,16 @@ class Studiumpay_Przelewy24_Decorator{
    * @param    array    $data       External data from form
    */
   public function setGetawayObject($data){
-    $protocol = ( isset($_SERVER['HTTPS'] )  && $_SERVER['HTTPS'] != 'off' )? "https://":"http://";
-
-    $this->przelewy24->addValue('p24_session_id', md5(session_id().date("YmdHis")));
-    $this->przelewy24->addValue('p24_url_return', $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=1");
-    $this->przelewy24->addValue('p24_url_status', $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=2");
-
-    $this->przelewy24->addValue('p24_country', 'PL');
-    $this->przelewy24->addValue('p24_currency', 'PLN');
-
-    $this->przelewy24->addValue('p24_description', 'Payment for studiumNVC courses');
-
     foreach($data as $k=>$v) $this->przelewy24->addValue($k,$v);
-
-    $this->przelewy24->addValue('p24_api_version', P24_VERSION);
   }
 
   public function saveOrder($data){
 
   }
 
-  public function sendPaymentRequest(){
-
+  public function trnRegister(){
+    $res = $this->przelewy24->trnRegister(true);
+    var_dump($res);
   }
 
 }

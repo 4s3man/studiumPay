@@ -106,21 +106,41 @@ class Studiumpay_Public {
 	 * @since    1.0.0
 	 */
 	public function handle_payment_form(){
-		// session_start();
 		$this->form->handle(function () {
+			$saveClientData = false;
 			$data = $this->form->getDataForPaymentRequest();
 
+			if ('1' === $data['data_save_agreement']) {
+					$saveClientData = true;
+					unset($data['data_save_agreement']);
+			}
+
+			$data = $this->przelewy24->addRequestConstants($data);
+
 			$this->przelewy24->setGetawayObject($data);
+			$this->przelewy24->trnRegister();
+
 
 			//todo zrobić
-			$this->repository->saveOrder($data);
+			// $this->repository->saveOrder($data);
 
 			//
 			// //todo zrobić
 			// $this->przelewy24->sendPaymentRequest();
-
-			exit('s');
 		});
+
+		//zrobić weryfikacje w return, zdebugować a potem dać ją tu
+		if (isset($_GET['ok']) && '2' === $_GET['ok']) {
+
+			exit('weryfikacja');
+		}
+
+		//powrót po transakcji
+		if (isset($_GET['ok']) && '1' === $_GET['ok']) {
+
+			exit('po zakończeniu transakcji');
+		}
+
 		//todo zrobić coś z tym tak żeby było ok
 		// session_regenerate_id();
 	}

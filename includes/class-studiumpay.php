@@ -187,7 +187,7 @@ class Studiumpay {
 
 		$plugin_public = new Studiumpay_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action('wp_head', $plugin_public, 'handle_payment_form' );
+		$this->loader->add_action('template_redirect', $plugin_public, 'handle_payment_form' );
 		$this->loader->add_action('studiumPay', $plugin_public, 'render_payment_form' );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );

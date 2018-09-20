@@ -1,5 +1,4 @@
 problemy z zapisem do bazy:
-  updatować valid w 3 tabelach lub usuwać z 3 tabel to troche słabo może lepiej osobną tabele na wszystko?
   czy crc jest potrzebny w bazie? przecież będzie zahardcodowany w aplikacji
   skąd wziąść event_id? musiałbym albo przekazywać ... aaa
   !! zapis do bazy danych przed obróbką danych na przelewy24 ? to znaczy repozytorium w

@@ -17,8 +17,6 @@ class Studiumpay_Przelewy24_Decorator{
    */
   public $przelewy24;
 
-  private $repository ;
-
   /**
    * Object constructor
    *
@@ -27,7 +25,6 @@ class Studiumpay_Przelewy24_Decorator{
    */
   public function __construct(){
     $this->przelewy24 = new Przelewy24(64225,64225,'319a865d1bb01efd',true);
-    $this->repository = new Studiumpay_Repository();
   }
 
   public function addRequestConstants(&$data){
@@ -39,7 +36,7 @@ class Studiumpay_Przelewy24_Decorator{
     $data['p24_country'] = 'PL';
     $data['p24_currency'] = 'PLN';
     $data['p24_description'] = 'Payment for studiumNVC courses';
-    $data['p24_api_version'] = P24_VERSION;
+    $data['p24_api_version'] = STUDIUMPAY_P24_VERSION;
 
     return $data;
   }
@@ -59,31 +56,23 @@ class Studiumpay_Przelewy24_Decorator{
     $this->addRequestConstants($data);
     $this->setGetawayObject($data);
 
-    $this->repository->saveOrder($data);
-
     $res = $this->przelewy24->trnRegister(false);
-    var_dump($res);
-    exit('register');
   }
 
   private function parseForTrnRegister($data, $products){
-    $id = 1;
-    $s = array_filter($products, function($value){
-      return (in_array((int)$value['id'], array_keys($data['productId_quantity'])));
+    $products = array_filter($products, function($value) use ($data){
+      return in_array((int)$value['id'], array_keys($data['productId_quantity']));
     });
 
-    var_dump(in_array(2, array_keys($data['productId_quantity'])));
+    $parsedData = [];
+    $id = 1;
+    foreach ($products as $product) {
+        $parsedData['p24_name_' . $id] = $product['post_name'];
+        $parsedData['p24_quantity_' . $id] = $data['productId_quantity'][$product['id']];
+        $parsedData['p24_price_' . $id] = intval((string)$product['cost']) * 100;
+        $id++;
+    }
 
-    // foreach ($data['productId_quantity'] as $productId => $quantity) {
-    //   if ($value > 0) {
-    //     $parsedData['p24_name_' . $id] = $key;
-    //     $parsedData['p24_quantity_' . $id] = intval((string) $value);
-    //     $parsedData['p24_price_' . $id] = intval((string)$this->products[$key]) * 100;
-    //     $id++;
-    //   }
-    // }
-
-    exit('parse for register');
 
     $parsedData['p24_client'] = $data['client_name'] . ' ' . $data['client_surname'];
     unset($data['client_name']);
@@ -93,9 +82,8 @@ class Studiumpay_Przelewy24_Decorator{
 
     $data['p24_amount'] *= 100;
 
-    return array_merge($parsedData, array_diff_key($data, $this->products));
+    unset($data['productId_quantity']);
 
-
+    return array_merge($parsedData, $data);
   }
-
 }

@@ -19,7 +19,7 @@ if (class_exists('Przelewy24')) {
  * Communication protol version
  * @var double
  */
-define("P24_VERSION", "3.2");
+define("STUDIUMPAY_P24_VERSION", "3.2");
 
 class Przelewy24 {
     /**
@@ -81,7 +81,7 @@ class Przelewy24 {
 
         $this->addValue("p24_merchant_id", $merchantId);
         $this->addValue("p24_pos_id", $this->posId);
-        $this->addValue("p24_api_version", P24_VERSION);
+        $this->addValue("p24_api_version", STUDIUMPAY_P24_VERSION);
 
         return true;
     }

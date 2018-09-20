@@ -120,7 +120,9 @@ class Studiumpay_Public {
 			$saveClientData = $this->clientPermitted($data) ? true : false;
 			unset($data['data_save_agreement']);
 
-			$this->przelewy24->trnRegister($data, $this->products);
+			$this->repository->saveOrder($data);
+			
+			// $this->przelewy24->trnRegister($data, $this->products);
 
 
 

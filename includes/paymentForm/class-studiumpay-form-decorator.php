@@ -25,7 +25,7 @@ class Studiumpay_Form_Decorator {
   private $errors = [];
 
   /**
-   * Array of products for checking the minimum cost of order
+   * Array for checking the minimum cost of order
    *
    * @since    1.0.0
    * @access   private
@@ -94,7 +94,7 @@ class Studiumpay_Form_Decorator {
       $this->form->getValues()
     );
   }
-
+  //todo delete
   public function getDataForPaymentRequest(){
     $data = $this->form->getValues();
     $postedProducts = array_intersect_key($data, $this->products);
@@ -187,13 +187,16 @@ class Studiumpay_Form_Decorator {
 
   private function productsToIdQuantityArray($data){
     foreach ($data as $key => $value) {
-      if (0 !== intval((string)$value) && preg_match('/productId_\d+/', $key)) {
-        $newKey = preg_replace('/productId_/', '', $key);
-        $data['productId_quantity'][$newKey] = $value;
+      if (preg_match('/productId_\d+/', $key)) {
+        if (0 !== intval((string)$value)) {
+          $newKey = preg_replace('/productId_/', '', $key);
+          $data['productId_quantity'][$newKey] = $value;
+        }
         unset($data[$key]);
       }
     }
 
     return $data;
   }
+
 }

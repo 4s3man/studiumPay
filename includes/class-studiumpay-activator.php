@@ -34,7 +34,7 @@ class Studiumpay_Activator {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql_purchasers = 'CREATE TABLE IF NOT EXISTS `wordpress`.`wp_studiumpay_purchaser` (
-		  `id` INT(11) NOT NULL,
+		  `id` INT(11) NOT NULL AUTO_INCREMENT,
 		  `name` VARCHAR(45) NOT NULL,
 		  `surname` VARCHAR(45) NOT NULL,
 		  `email` VARCHAR(45) NOT NULL,
@@ -44,12 +44,10 @@ class Studiumpay_Activator {
 		  PRIMARY KEY (`id`),
 		  UNIQUE INDEX `email_UNIQUE` (`email` ASC)) '. $charset_collate .';';
 
-
 			$sql_orders = 'CREATE TABLE IF NOT EXISTS `wordpress`.`wp_studiumpay_order` (
-			  `id` INT(11) NOT NULL,
+			  `id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `purchaser_id` INT(11) NOT NULL,
 			  `amount` INT(11) NOT NULL,
-			  `crc` VARCHAR(60) NOT NULL,
 			  `current_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			  `valid` TINYINT(1) NOT NULL DEFAULT 0,
 			  PRIMARY KEY (`id`)) '. $charset_collate .';';

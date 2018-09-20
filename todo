@@ -1,9 +1,11 @@
-problemy z zapisem do bazy:
-  czy crc jest potrzebny w bazie? przecież będzie zahardcodowany w aplikacji
-  skąd wziąść event_id? musiałbym albo przekazywać ... aaa
-  !! zapis do bazy danych przed obróbką danych na przelewy24 ? to znaczy repozytorium w
-    public , w public też powinny być pobrane z bazy wydarzenia które będą podawane do form
+najświeższe
+  zrobić event usuwający do bazy w repozytorium
+  zrobić w końcu testy jakoś :(
+  ??zrobić tak żeby form zwracał obiekt "order" który implementuje interfejsy 'parseForPrzlewy24TrnRegister', i 'parseForDatabaseSave'?
+  
 
+problemy z zapisem do bazy:
+  !!
     (wydarzenia: id, nazwa, itp) -> form renderuje nazwy i podaje id ->
     zapis do bazy + rejestracja eventu usuwającego po jakimś czasie wszystkie rzeczy z bazy łączące się z danym_order_id które nie są zwalidowane
     przelewy24 robią z tego $data do przelewów
@@ -11,14 +13,11 @@ problemy z zapisem do bazy:
     czytanie z bazy i weryfikacja transakcji,
     validowanie rzeczy w tablicach
   !!
-zacząć od form-decorator $courses in __construct
-i zjebały się też constrainty apropo
 
 
 form Handling
   new session id before form
-  validate transaction / make and debug
-  save tmp data
+  validate transaction / make and debug -- potrzeba to zrobić nie na lokal hoście albo pozwolić postować przelewom na mój komp
   save validated transaction data
 
 

@@ -1,6 +1,6 @@
 <?php
 
-class Studiumpay_Product{
+class Studiumpay_Order{
 
   public $id;
 

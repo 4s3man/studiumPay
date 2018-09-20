@@ -67,6 +67,14 @@ class Studiumpay_Public {
 	 */
 	private $repository;
 
+	//todo podać to z tribe_events
+	private $courses = [
+		[ 'id' => 1, 'post_name' => 'a', 'cost' => 100  ],
+		[ 'id' => 2, 'post_name' => 'b', 'cost' => 100  ],
+		[ 'id' => 3, 'post_name' => 'c', 'cost' => 100  ],
+		[ 'id' => 4, 'post_name' => 'd', 'cost' => 100  ],
+	];
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -77,7 +85,7 @@ class Studiumpay_Public {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$this->form = new Studiumpay_Form_Decorator();
+		$this->form = new Studiumpay_Form_Decorator($courses);
 		$this->przelewy24 = new Studiumpay_Przelewy24_Decorator();
 		$this->repository = new Studiumpay_Repository();
 	}
@@ -106,19 +114,17 @@ class Studiumpay_Public {
 	 * @since    1.0.0
 	 */
 	public function handle_payment_form(){
+		$saveClientData = false;
+
 		$this->form->handle(function () {
-			$saveClientData = false;
 			$data = $this->form->getDataForPaymentRequest();
 
-			if ('1' === $data['data_save_agreement']) {
+			if (isset($data['data_save_agreement']) && '1' === $data['data_save_agreement']) {
 					$saveClientData = true;
 					unset($data['data_save_agreement']);
 			}
 
-			$data = $this->przelewy24->addRequestConstants($data);
-
-			$this->przelewy24->setGetawayObject($data);
-			$this->przelewy24->trnRegister();
+			$this->przelewy24->trnRegister($data);
 
 
 			//todo zrobić
@@ -129,14 +135,10 @@ class Studiumpay_Public {
 			// $this->przelewy24->sendPaymentRequest();
 		});
 
-		//zrobić weryfikacje w return, zdebugować a potem dać ją tu
-		if (isset($_GET['ok']) && '2' === $_GET['ok']) {
-
-			exit('weryfikacja');
-		}
 
 		//powrót po transakcji
 		if (isset($_GET['ok']) && '1' === $_GET['ok']) {
+			var_dump($_POST);
 
 			exit('po zakończeniu transakcji');
 		}

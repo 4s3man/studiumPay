@@ -1,11 +1,24 @@
-form
-  js dynamically set amount based on selected inputs
+problemy z zapisem do bazy:
+  updatować valid w 3 tabelach lub usuwać z 3 tabel to troche słabo może lepiej osobną tabele na wszystko?
+  czy crc jest potrzebny w bazie? przecież będzie zahardcodowany w aplikacji
+  skąd wziąść event_id? musiałbym albo przekazywać ... aaa
+  !! zapis do bazy danych przed obróbką danych na przelewy24 ? to znaczy repozytorium w
+    public , w public też powinny być pobrane z bazy wydarzenia które będą podawane do form
+
+    (wydarzenia: id, nazwa, itp) -> form renderuje nazwy i podaje id ->
+    zapis do bazy + rejestracja eventu usuwającego po jakimś czasie wszystkie rzeczy z bazy łączące się z danym_order_id które nie są zwalidowane
+    przelewy24 robią z tego $data do przelewów
+    rejestrują transakcję
+    czytanie z bazy i weryfikacja transakcji,
+    validowanie rzeczy w tablicach
+   !!
+
+
 
 form Handling
-  regenerate session_id somewhere
+  new session id before form
+  validate transaction / make and debug
   save tmp data
-  register transaction
-  validate transaction
   save validated transaction data
 
 
@@ -13,3 +26,4 @@ form Handling
 step 2
 form
  make inputs from tribe events
+ js dynamically set amount based on selected inputs

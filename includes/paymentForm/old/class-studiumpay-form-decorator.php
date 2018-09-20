@@ -41,7 +41,7 @@ class Studiumpay_Form_Decorator {
   /**
   * Construct
   */
-  public function __construct(){
+  public function __construct($courses){
     $form = new Gregwar\Formidable\Form(
       __DIR__.'/form-template.html.php',
        [

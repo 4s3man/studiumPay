@@ -17,14 +17,7 @@ class Studiumpay_Przelewy24_Decorator{
    */
   public $przelewy24;
 
-  // /**
-  //  * Internal data to fill the form
-  //  *
-  //  * @since    1.0.0
-  //  * @access   private
-  //  * @var      Przelewy24\Przelewy24    $przelewy24
-  //  */
-  // private $internalData ;
+  private $repository ;
 
   /**
    * Object constructor
@@ -34,6 +27,7 @@ class Studiumpay_Przelewy24_Decorator{
    */
   public function __construct(){
     $this->przelewy24 = new Przelewy24(64225,64225,'319a865d1bb01efd',true);
+    $this->repository = new Studiumpay_Repository();
   }
 
   public function addRequestConstants(&$data){
@@ -41,8 +35,7 @@ class Studiumpay_Przelewy24_Decorator{
 
     $data['p24_session_id'] = md5(session_id().date("YmdHis"));
     $data['p24_url_return'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=1";
-    //todo uncoment when verivication will be writen
-    // $data['p24_url_satatus'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=2";
+    $data['p24_url_satatus'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?ok=2";
     $data['p24_country'] = 'PL';
     $data['p24_currency'] = 'PLN';
     $data['p24_description'] = 'Payment for studiumNVC courses';
@@ -61,13 +54,15 @@ class Studiumpay_Przelewy24_Decorator{
     foreach($data as $k=>$v) $this->przelewy24->addValue($k,$v);
   }
 
-  public function saveOrder($data){
+  public function trnRegister($data){
+    $this->addRequestConstants($data);
+    $this->setGetawayObject($data);
 
-  }
+    $this->repository->saveOrder($data);
 
-  public function trnRegister(){
-    $res = $this->przelewy24->trnRegister(true);
+    $res = $this->przelewy24->trnRegister(false);
     var_dump($res);
+    exit('register');
   }
 
 }

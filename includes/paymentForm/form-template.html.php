@@ -1,10 +1,10 @@
 <form class="studiumPay jumbotron" id="studiumPay_form" method="post" >
   <div class="row">
     <div class="col-6">
-      <?php foreach ($this->variables['courses'] as $name => $cost): ?>
-        <label for="<?php echo $name; ?>">
-          <?php echo $name; ?>
-        <input class='studiumPay_intInput' type="int" min="0" required name="<?php echo $name; ?>" value="0">
+      <?php foreach ($this->variables['products'] as $row): ?>
+        <label for="<?php echo 'productId_' . $row['id']; ?>">
+          <?php echo $row['post_name']; ?>
+        <input class='studiumPay_intInput' type="int" min="0" required name="<?php echo 'productId_' . $row['id']; ?>" value="0">
         </label>
       <?php endforeach; ?>
     </div>

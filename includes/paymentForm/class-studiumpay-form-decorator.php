@@ -25,21 +25,16 @@ class Studiumpay_Form_Decorator {
   private $errors = [];
 
   /**
-   * Array of courses //todo set dinamicaly
+   * Array of products for checking the minimum cost of order
    *
    * @since    1.0.0
    * @access   private
-   * @var      Array    $courses    Active courses, name => cost
+   * @var      Array    $products    Active products, 'productId_' . id => cost
    */
-  private $courses = [
-    'a' => 100,
-    'b' => 100,
-    'c' => 100,
-    'd' => 100,
-  ];
+  private $products = [];
 
   /**
-   * Array of courses
+   * Array of supported languages
    *
    * @since    1.0.0
    * @access   private
@@ -53,11 +48,13 @@ class Studiumpay_Form_Decorator {
   /**
   * Construct
   */
-  public function __construct(){
+  public function __construct($products){
+    $this->products = $this->parseProducts($products);
+
     $form = new Gregwar\Formidable\Form(
       __DIR__.'/form-template.html.php',
        [
-         'courses' => $this->courses,
+         'products' => $products,
          'errors' => $this->errors,
        ]
      );
@@ -68,6 +65,7 @@ class Studiumpay_Form_Decorator {
 
    $this->form = $form;
   }
+
 
   /**
   * Handle form, default handle errors
@@ -92,20 +90,22 @@ class Studiumpay_Form_Decorator {
   }
 
   public function getValues(){
-    return $this->form->getValues();
+    return $this->productsToIdQuantityArray(
+      $this->form->getValues()
+    );
   }
 
   public function getDataForPaymentRequest(){
     $data = $this->form->getValues();
-    $postedCourses = array_intersect_key($data, $this->courses);
+    $postedProducts = array_intersect_key($data, $this->products);
     $id = 1;
 
     $parsedData = [];
-    foreach ($postedCourses as $key => $value) {
+    foreach ($postedProducts as $key => $value) {
       if ($value > 0) {
         $parsedData['p24_name_' . $id] = $key;
         $parsedData['p24_quantity_' . $id] = intval((string) $value);
-        $parsedData['p24_price_' . $id] = intval((string)$this->courses[$key]) * 100;
+        $parsedData['p24_price_' . $id] = intval((string)$this->products[$key]) * 100;
         $id++;
       }
     }
@@ -118,7 +118,7 @@ class Studiumpay_Form_Decorator {
 
     $data['p24_amount'] *= 100;
 
-    return array_merge($parsedData, array_diff_key($data, $this->courses));
+    return array_merge($parsedData, array_diff_key($data, $this->products));
   }
 
   /**
@@ -136,8 +136,8 @@ class Studiumpay_Form_Decorator {
 
     $form->addConstraint('p24_amount', function($value) {
         $data = $this->form->getValues();
-        $postedCourses = array_intersect_key($data, $this->courses);
-        $minCost = $this->calculateMinCost($postedCourses);
+        $postedProducts = array_intersect_key($data, $this->products);
+        $minCost = $this->calculateMinCost($postedProducts);
         if ($value < $minCost) {
           return 'Cost is too low';
         }
@@ -167,11 +167,33 @@ class Studiumpay_Form_Decorator {
     echo '</div>';
   }
 
-  private function calculateMinCost($postedCourses){
+  private function parseProducts($products){
+    $id = array_column($products, 'id');
+    $cost = array_column($products, 'cost');
+    array_walk($id, function(&$element){
+      $element = 'productId_' . $element;
+    });
+
+    return array_combine($id, $cost);
+  }
+
+  private function calculateMinCost($postedProducts){
     $minCost = 0;
-    foreach ($postedCourses as $key => $value) {
-      $minCost += $value * $this->courses[$key];
+    foreach ($postedProducts as $key => $value) {
+      $minCost += $value * $this->products[$key];
     }
     return $minCost;
+  }
+
+  private function productsToIdQuantityArray($data){
+    foreach ($data as $key => $value) {
+      if (0 !== intval((string)$value) && preg_match('/productId_\d+/', $key)) {
+        $newKey = preg_replace('/productId_/', '', $key);
+        $data['productId_quantity'][$newKey] = $value;
+        unset($data[$key]);
+      }
+    }
+
+    return $data;
   }
 }

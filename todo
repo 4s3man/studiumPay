@@ -10,8 +10,9 @@ problemy z zapisem do bazy:
     rejestrują transakcję
     czytanie z bazy i weryfikacja transakcji,
     validowanie rzeczy w tablicach
-   !!
-
+  !!
+zacząć od form-decorator $courses in __construct
+i zjebały się też constrainty apropo
 
 
 form Handling

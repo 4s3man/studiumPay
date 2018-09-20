@@ -68,7 +68,7 @@ class Studiumpay_Public {
 	private $repository;
 
 	//todo podać to z tribe_events
-	private $courses = [
+	private $products = [
 		[ 'id' => 1, 'post_name' => 'a', 'cost' => 100  ],
 		[ 'id' => 2, 'post_name' => 'b', 'cost' => 100  ],
 		[ 'id' => 3, 'post_name' => 'c', 'cost' => 100  ],
@@ -85,7 +85,7 @@ class Studiumpay_Public {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$this->form = new Studiumpay_Form_Decorator($courses);
+		$this->form = new Studiumpay_Form_Decorator($this->products);
 		$this->przelewy24 = new Studiumpay_Przelewy24_Decorator();
 		$this->repository = new Studiumpay_Repository();
 	}
@@ -114,17 +114,15 @@ class Studiumpay_Public {
 	 * @since    1.0.0
 	 */
 	public function handle_payment_form(){
-		$saveClientData = false;
-
 		$this->form->handle(function () {
-			$data = $this->form->getDataForPaymentRequest();
+			$data = $this->form->getValues();
 
-			if (isset($data['data_save_agreement']) && '1' === $data['data_save_agreement']) {
-					$saveClientData = true;
-					unset($data['data_save_agreement']);
-			}
+			$saveClientData = $this->clientPermitted($data) ? true : false;
+			unset($data['data_save_agreement']);
 
-			$this->przelewy24->trnRegister($data);
+			$this->przelewy24->trnRegister($data, $this->products);
+
+
 
 
 			//todo zrobić
@@ -133,6 +131,7 @@ class Studiumpay_Public {
 			//
 			// //todo zrobić
 			// $this->przelewy24->sendPaymentRequest();
+			exit('form handle');
 		});
 
 
@@ -154,5 +153,9 @@ class Studiumpay_Public {
 	 */
 	public function render_payment_form(){
 		$this->form->render();
+	}
+
+	private function clientPermitted($data){
+		return isset($data['data_save_agreement']) && 1 === intval((string)$data['data_save_agreement']);
 	}
 }
